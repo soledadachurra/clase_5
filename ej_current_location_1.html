@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>JavaScript</title>
+</head>
+<body>
+	<p>El cuerpo está en blanco.</p>
+	<script>
+		var request = new XMLHttpRequest();
+		request.open('GET', 'https://crossorigin.me/http://api.open-notify.org/iss-now.json', true);
+		request.onload = function () {
+			var data = JSON.parse(this.response);
+			var time = new Date(data.timestamp*1000);
+			var lon = data.iss_position.longitude;
+			var lat = data.iss_position.latitude;
+			document.write("<p>" + time + "</p><p>" + lat + "," + lon + "<p>");
+			}
+		request.send();			
+	</script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>JavaScript</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+  integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+  crossorigin=""></script>
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:500" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<!--desde aquí el menú de navegación-->
+<nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+<div class="container">
+	<a class="navbar-brand" href="index.html">JavaScript</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item active"><a class="nav-link" href="index.html">Home</a></li>
+			<li class="nav-item"><a class="nav-link" href="weather.html">OpenWeather</a></li>
+			<li class="nav-item"><a class="nav-link" href="earthquake.html">Earthquake</a></li>
+		</ul>
+	</div>
+</div>
+</nav>
+<!--hasta aquí el menú de navegación-->
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-sm-12 py-5">
+<h1>Home</h1>
+<p>Una variable puede almacenar números, booleanos o "varios caracteres en cadena".</p>
+<p>Una variable también puede contener un arreglo, en el que es posible almacenar números, booleanos o "varios caracteres en cadena". Por ejemplo: <code>var unArreglo = [18, true, "Wingardium Leviosa"]</code></p>
+<p>Luego puede consultarse cada elemento almacenado según su posición, así, por ejemplo, <code>unArreglo[2]</code> es <code>Wingardium Leviosa</code> (recuerden que la primera posición es 0).</p>
+<p>Una variable también puede contener un objeto, en el que pueden almacenarse números, booleanos, "varios caracteres en cadena" o [arreglos], manteniendo una estructura donde se repetie una relación de pares donde uno denomina y otro contiene lo denominado. Por ejemplo:</p>
+<pre><code>var unObjeto = { pais : "Chile", raza: false, habitantes: 17374000}</pre></code>
+<p>Luego puede consultarse cada contenido por su denominación. Así, por ejemplo, <code>unObjeto.habitantes</code> es <code>17374000</code></p>
+<p>JSON se inspira en el objeto de JavaScript, al nivel de deberle su nombre (<strong>J</strong>ava<strong>S</strong>cript <strong>O</strong>bject <strong>N</strong>otation). Pero hay diferencias que hacen imposible meter, a la fuerza y directamente, el contenido de un <a href="https://jsonformatter.curiousconcept.com/" title="JSON Formatter & Validator" target="_blank">JSON validado</a> a una variable de JavaScript. Antes es necesario "parsear" ese JSON; esto es analizar su contenido y extraer sus valores al modo que corresponda.</p>
+<p>A continuación copio y pego un JSON, y en la consola del navegador está impreso el resultado de <strong>analizar el contenido</strong> de ese mismo JSON y <strong>extraer los valores</strong> a la manera que pueden almacenarse en una variable de Javascript (en este caso, como un arreglo de 2 objetos).</p>
+<pre><code>[{
+      "name":"Darth Vader",
+      "height":202,
+      "mass":136,
+      "hair_color":"none",
+      "skin_color":"white",
+      "eye_color":"yellow",
+      "birth_year":"41.9BBY",
+      "gender":"male",
+      "homeworld":"Tatooine",
+      "url":"https://swapi.co/api/people/4/"
+   },
+   {
+    "name": "Anakin Skywalker", 
+    "height": "188", 
+    "mass": "84", 
+    "hair_color": "blond", 
+    "skin_color": "fair", 
+    "eye_color": "blue", 
+    "birth_year": "41.9BBY", 
+    "gender": "male", 
+    "homeworld": "Tatooine",
+    "url": "https://swapi.co/api/people/11/"
+}]</code></pre>
+
+<p>A la variable de JavaScript que contiene este arreglo, con los dos objetos, la nombré starwars. Con esa información, ustedes podrían adelantarse al resultado de pedirle a la consola lo almacenado en <code>starwars[0].name</code></p>
+
+<p>Esto se pone interesante cuando podemos parsear un JSON que está en línea, siendo constantemente actualizado. Con ello podemos hacer cosas como las siguientes:</p>
+
+<div class="table-responsive py-3">
+<table class="table table-striped">
+	<tr>
+		<td>http://api.open-notify.org/astros.json</td>
+		<td><a href="ej_people_1.html" target="_blank" >Ejemplo 1</a></td>
+		<td><a href="ej_people_2.html" target="_blank" >Ejemplo 2</a></td>
+	</tr>
+	<tr>
+		<td>http://api.open-notify.org/iss-now.json</td>
+		<td><a href="ej_current_location_1.html" target="_blank">Ejemplo 1</a></td>
+		<td><a href="ej_current_location_2.html" target="_blank">Ejemplo 2</a></td>
+	</tr>
+	<tr>
+		<td colspan="2">https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson</td>
+		<td><a href="ej_all_earthquakes.html" target="_blank">Ejemplo</a></td>
+	</tr>
+</table>
+</div>
+
+<p>En los ejemplos de la tabla, y en las páginas <a href="weather.html">weather.html</a> y <a href="earthquake.html">earthquake.html</a> uso este script:</p>
+
+<pre><code>var request = new XMLHttpRequest();
+request.open('GET', 'URI', true);
+request.onload = function () {
+	var data = JSON.parse(this.response);
+	//acá agregaremos más…
+}
+request.send();	
+</code></pre>
+
+<p>Lo que es clave en este script es el uso del objeto XMLHttpRequest. Para comprenderlo, se recomienda revisar:</p>
+<ul>
+	<li><a href="https://developer.mozilla.org/es/docs/Web/API/XMLHttpRequest">XMLHttpRequest - Web API reference | MDN</a></li>
+	<li><a href="https://www.w3schools.com/xml/dom_httprequest.asp">XML DOM - HttpRequest object</a></li>
+</ul>
+</div><!--/col-12-->
+		<div class="col-sm-12 border-top">
+			<div class="row py-3 small">
+				<div class="col-sm-9">
+					<p>Diseño y Nuevos Medios</p>
+				</div>
+				<div class="col-sm-3 text-right">
+					<p><a href="https://github.com/profesorfaco/dno037-2018-05">Clase 5</a></p>
+				</div>
+			</div>		
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+//acá metí a mano el JON de la familia
+var starwars = JSON.parse('[{"name":"Darth Vader","height":202,"mass":136,"hair_color":"none","skin_color":"white","eye_color":"yellow","birth_year":"41.9BBY","gender":"male","homeworld":"Tatooine","url":"https://swapi.co/api/people/4/"},{"name":"Anakin Skywalker","height":"188","mass":"84","hair_color":"blond","skin_color":"fair","eye_color":"blue","birth_year":"41.9BBY","gender":"male","homeworld":"Tatooine","url":"https://swapi.co/api/people/11/"}]');
+console.log(starwars);
+</script>
+
+</body>
+</html>
+

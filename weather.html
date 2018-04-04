@@ -1,0 +1,273 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>JavaScript</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+  integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+  crossorigin=""></script>
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<!--desde aquí el menú de navegación-->
+<nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+<div class="container">
+	<a class="navbar-brand" href="index.html">JavaScript</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+			<li class="nav-item active"><a class="nav-link" href="weather.html">OpenWeather</a></li>
+			<li class="nav-item"><a class="nav-link" href="earthquake.html">Earthquake</a></li>
+		</ul>
+	</div>
+</div>
+</nav>
+<!--hasta aquí el menú de navegación-->
+
+<div class="container">
+    <div class="row justify-content-center">
+		<div class="col-sm-12 py-5">
+			<h1>OpenWeather</h1>
+			<p>Puedes consultar el tiempo atmosférico en todo el mundo con la <a href="https://openweathermap.org/api">WeatherAPI</a> de <a href="https://openweathermap.org/api" target="_blank">OpenWeatherMap</a>. Para usar esta API necesitas una <a href="http://openweathermap.org/appid">APIKEY</a>, la que puedes obtener con una <a href="https://home.openweathermap.org/users/sign_up">cuenta gratuita</a>.</p>
+			<div id="mapid"></div>
+			<aside></aside>
+			<p>La activación de una APIKEY para cuentas gratuitas demora 10 minutos. Pasado ese tiempo, puedes hacer la siguiente consulta:</p>
+			<pre><code>https://api.openweathermap.org/data/2.5/weather?id={CITYID}&units=metric&appid={APIKEY}</code></pre>
+			<p>Otra opción para hacer consulta es:</p> 
+			<pre><code>https://api.openweathermap.org/data/2.5/weather?q={CITYNAME}&units=metric&appid={APIKEY}</code></pre>
+			<p>El <code>CITYNAME</code> debe ser ingresado en inglés, por ejemplo: Tokyo, London, Moscow, Melbourne, etc. Pero, para evitar <a href="https://es.wikipedia.org/wiki/Valpara%C3%ADso_(Indiana)" target="_blank" title="Valparaíso (Indiana)
+			">confusiones</a>, la <a href="https://openweathermap.org/current">documentación de la API</a> recomienda el uso de <code>CITYID</code>:</p>
+			<div class="row">
+				<div class="col-sm-6 py-2 table-responsive">
+					<table class="table table-hover">
+					<thead>	
+						<tr>
+							<th>Ciudad, País</th>
+							<th><code>CITYID</code></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Amsterdam, NL</td>
+							<td><code>2759794</code></td>
+						</tr>
+						<tr>
+							<td>Beijing, CN</td>
+							<td><code>1816670</code></td>							
+						</tr>
+						<tr>
+							<td>Delhi, IN </td>
+							<td><code>1273294</code></td>
+						</tr>
+						<tr>
+							<td>Doha, QA</td>
+							<td><code>290030</code></td>							
+						</tr>
+						<tr>
+							<td>Dubai, AE</td>
+							<td><code>292223</code></td>							
+						</tr>
+						<tr>
+							<td>Frankfurt, DE</td>
+							<td><code>3220802</code></td>
+						</tr>
+						<tr>
+							<td>Istanbul, TR</td>
+							<td><code>745044</code></td>
+						</tr>
+						<tr>
+							<td>London, GB</td>
+							<td><code>2643743</code></td>
+						</tr>
+						<tr>
+							<td>Madrid, ES</td>
+							<td><code>3117735</code></td>
+						</tr>
+						<tr>
+							<td>Mexico City, MX</td>
+							<td><code>3530597</code></td>
+						</tr>
+						<tr>
+							<td>Milan, IT</td>
+							<td><code>6542283</code></td>
+						</tr>
+						<tr>
+							<td>Moscow, RU</td>
+							<td><code>524901</code></td>
+						</tr>
+						<tr>
+							<td>New York, US</td>
+							<td><code>5128581</code></td>							
+						</tr>												
+						<tr>
+							<td>Paris, FR</td>
+							<td><code>2988507</code></td>							
+						</tr>
+						<tr>
+							<td>Sydney, AU</td>
+							<td><code>2147714</code></td>							
+						</tr>								
+						<tr>
+							<td>Tokyo, JP</td>
+							<td><code>1850147</code></td>							
+						</tr>
+					</tbody>
+					</table>
+				</div><!--/col-sm-6 py-2 table-responsive-->
+
+				<div class="col-sm-6 py-2 table-responsive">
+					<table class="table table-hover">
+					<thead>	
+						<tr>
+							<th>Ciudad (CL)</th>
+							<th><code>CITYID</code></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Arica</td>
+							<td><code>3899361</code></td>
+						</tr>
+						<tr>
+							<td>Iquique</td>
+							<td><code>3887127</code></td>							
+						</tr>
+						<tr>
+							<td>Antofagasta</td>
+							<td><code>3899539</code></td>
+						</tr>
+						<tr>
+							<td>Copiapó</td>
+							<td><code>3893656</code></td>							
+						</tr>
+						<tr>
+							<td>La Serena</td>
+							<td><code>3884373</code></td>							
+						</tr>
+						<tr>
+							<td>Valparaíso</td>
+							<td><code>3868626</code></td>
+						</tr>
+						<tr>
+							<td>Santiago</td>
+							<td><code>3871336</code></td>
+						</tr>
+						<tr>
+							<td>Rancagua</td>
+							<td><code>3873775</code></td>
+						</tr>
+						<tr>
+							<td>Talca</td>
+							<td><code>3870294</code></td>
+						</tr>
+						<tr>
+							<td>Chillán</td>
+							<td><code>3895088</code></td>
+						</tr>
+						<tr>
+							<td>Concepción</td>
+							<td><code>3870282</code></td>
+						</tr>
+						<tr>
+							<td>Temuco</td>
+							<td><code>3870011</code></td>
+						</tr>
+						<tr>
+							<td>Valdivia</td>
+							<td><code>3868707</code></td>
+						</tr>
+						<tr>
+							<td>Puerto Montt</td>
+							<td><code>3874960</code></td>
+						</tr>
+						<tr>
+							<td>Coyhaique</td>
+							<td><code>3894426</code></td>
+						</tr>								
+						<tr>
+							<td>Punta Arenas</td>
+							<td><code>3874787</code></td>
+						</tr>
+					</tbody>
+					</table>
+				</div><!--/col-sm-6 py-2 table-responsive-->
+			</div><!--/row-->
+		</div><!--/col-12-->
+		<div class="col-sm-12 border-top">
+			<div class="row py-3 small">
+				<div class="col-sm-9">
+					<p>Diseño y Nuevos Medios</p>
+				</div>
+				<div class="col-sm-3 text-right">
+					<p><a href="https://github.com/profesorfaco/dno037-2018-05">Clase 5</a></p>
+				</div>
+			</div>		
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+//https://api.openweathermap.org/data/2.5/weather?id={CITYID}&units=metric&appid={APIKEY}
+//dividamos eso en partes, para que sea más sencillo reemplazar el {CITYID} y su {APIKEY}
+var urlCityID = 2988507//cambiar por el código de ciudad que más les acomode
+var urlApiKey = "8027a2e246a05fda09e53a2aa53b9a50" //colocar acá su API KEY, entre las comillas
+var url = "https://api.openweathermap.org/data/2.5/weather?id=" + urlCityID + "&units=metric" + "&appid=" + urlApiKey;
+//Ahora vamos por el request de la URL que estructuramos
+var request = new XMLHttpRequest();
+request.open('GET', url, true);
+request.onload = function () {
+	var data = JSON.parse(this.response);
+	var lat = data.coord.lat;
+	var lon = data.coord.lon;
+	var ciudad = data.name;
+	var humedad = data.main.humidity;
+  	var temperatura = Math.round(data.main.temp);
+  	//https://openweathermap.org/weather-conditions
+	var icono = data.weather[0].icon;
+	var iconoTxt = data.weather[0].description;
+	console.log("Estás viendo el tiempo en "+ciudad);
+	console.log("La temperatura es " + temperatura + "º C");
+	console.log("La humedad es " + humedad + "%");
+	console.log(data);
+	//mapa
+	var mymap = L.map('mapid').setView([lat, lon], 15);
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 20,
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+	L.marker([lat, lon]).addTo(mymap)
+	.bindPopup("<h5>"+ ciudad + "</h5><p><strong>Temperatura</strong> " + temperatura + "ºC &bull; <strong>Humedad</strong> " + humedad + "%<p>").openPopup();	
+	//condiciones para el color de fondo
+	if(temperatura >= 20){
+		document.getElementsByTagName("aside")[0].style.backgroundColor = "#FFCCBE";
+	} else if(temperatura < 20 && temperatura >= 15 ) {
+		document.getElementsByTagName("aside")[0].style.backgroundColor = "#FFEBBA";
+	} else if(temperatura < 15 && temperatura >= 10 ) {
+		document.getElementsByTagName("aside")[0].style.backgroundColor = "#F00000";
+	} else if(temperatura < 10 && temperatura >= 5 ) {
+		document.getElementsByTagName("aside")[0].style.backgroundColor = "#C6E6CC";
+	} else {
+		document.getElementsByTagName("aside")[0].style.backgroundColor = "#AEECF1";
+	}
+	document.getElementsByTagName("aside")[0].innerHTML = "<img src=\"http://openweathermap.org/img/w/"+ icono +".png\">" + iconoTxt;
+}
+request.send();
+</script>
+</body>
+</html>
+

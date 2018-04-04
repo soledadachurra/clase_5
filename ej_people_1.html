@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>JavaScript</title>
+</head>
+<body>
+	<p>El cuerpo está en blanco.</p>
+	<script>
+		var request = new XMLHttpRequest();
+		request.open('GET', 'https://crossorigin.me/http://api.open-notify.org/astros.json', true);
+		request.onload = function () {
+			var data = JSON.parse(this.response);
+			var howMany = data.number;
+			document.write("<p>Hay " + howMany + " personas en el espacio:</p><ul>");
+				for(var x = 0; x < howMany; x++){
+					console.log(data.people[x].name);
+					document.write("<li>" + data.people[x].name + "</li>");
+				}
+			document.write("</ul>")	
+			}
+		request.send();			
+	</script>
+</body>
+</html>

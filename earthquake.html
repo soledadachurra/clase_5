@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>JavaScript</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"
+  integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
+  crossorigin=""/>
+<script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"
+  integrity="sha512-/Nsx9X4HebavoBvEBuyp3I7od5tA0UzAxs+j83KgC8PU0kgB4XiK4Lfe4y4cgBtaRJQEIFCW+oC506aPT2L1zw=="
+  crossorigin=""></script>
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400" rel="stylesheet">
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<!--desde aquí el menú de navegación-->
+<nav class="navbar navbar-expand-md navbar-light fixed-top bg-light">
+<div class="container">
+	<a class="navbar-brand" href="index.html">JavaScript</a>
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+			<li class="nav-item"><a class="nav-link" href="weather.html">OpenWeather</a></li>
+			<li class="nav-item active"><a class="nav-link" href="earthquake.html">Earthquake</a></li>
+		</ul>
+	</div>
+</div>
+</nav>
+<!--hasta aquí el menú de navegación-->
+
+<div class="container">
+    <div class="row justify-content-center">
+		<div class="col-sm-12 py-5">
+			<h1>Earthquake</h1>
+			<p>El <a href="https://earthquake.usgs.gov/" target="_blank">Earthquake Hazards Program</a> del <a href="https://www.usgs.gov/" target="_blank" title="U.S. Geological Survey">USGS</a>, tiene un servicio de <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php" target="_blank">GeoJSON Summary Format</a>, donde podemos encontrar registros de los movimientos telúricos alrededor del mundo, actualizados cada 5 minutos.</p>
+			<p>Consultando al GeoJSON de <a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson" target="_blank">M4.5+ Earthquakes del Past Day</a>, tenemos que el último movimiento registrado el día <span id="dia"></span> ocurrió a las <span id="hora"></span> GMT en <span id="pais"></span> (<span id="lugar"></span>):</p>
+			<div id="mapid"></div>
+		</div><!--/col-12-->
+		<div class="col-sm-12 border-top">
+			<div class="row py-3 small">
+				<div class="col-sm-9">
+					<p>Diseño y Nuevos Medios</p>
+				</div>
+				<div class="col-sm-3 text-right">
+					<p><a href="https://github.com/profesorfaco/dno037-2018-05">Clase 5</a></p>
+				</div>
+			</div>		
+		</div>
+	</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script>
+var request = new XMLHttpRequest();
+request.open('GET', 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_day.geojson', true);
+request.onload = function () {
+	var data = JSON.parse(this.response);
+	var lat = data.features[3].geometry.coordinates[1];
+	var lon = data.features[3].geometry.coordinates[0];
+	var where = data.features[3].properties.place;
+	var whereDetail = where.split(',')[0] //el string tiene una coma, pido lo que hay antes de ella.
+	var whereCountry = where.split(',')[1] //el string tiene una coma, pido lo que hay después de ella.
+	var when = new Date(data.features[3].properties.time);
+	var whenUTC = when.toUTCString();
+	var whenTime = whenUTC.split(' ')[4];
+	var whenDay = whenUTC.split(' ')[1];
+	var magnitud = data.features[3].properties.mag;
+	document.getElementById("dia").innerHTML = whenDay;
+	document.getElementById("hora").innerHTML = whenTime;
+	document.getElementById("pais").innerHTML = whereCountry;
+	document.getElementById("lugar").innerHTML = whereDetail;
+	console.log(data);
+	console.log(whenUTC);
+	//mapa
+	var mymap = L.map('mapid').setView([lat, lon], 2);
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+		id: 'mapbox.streets'
+	}).addTo(mymap);
+	L.marker([lat, lon]).addTo(mymap)
+	.bindPopup("<h5>"+ magnitud + "</h5><p>" + lat + "," + lon + "<p>").openPopup();
+}
+request.send();
+</script>
+</body>
+</html>
+

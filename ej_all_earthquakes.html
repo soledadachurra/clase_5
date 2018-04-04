@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>JavaScript</title>
+</head>
+<body>
+<p>El cuerpo está en blanco.</p>	
+<script>
+var request = new XMLHttpRequest();
+var url= "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
+request.open('GET', url, true);
+request.onload = function () {
+	var data = JSON.parse(this.response);
+	//una función como alternativa al ciclo for
+	document.write("<h1>All Earthquakes</h1><h2>Past 7 Days</h2><h5>" + url + "</h5>");
+	data.features.forEach(function(entry){	
+	var titles = entry.properties.title;
+	console.log (titles);
+	//una condición para imprimer solo algunas
+	if (entry.properties.title.indexOf(', Chile') > 0){
+		document.write("<p>" + titles + "</p>");
+	}
+	//noten como recién cierro la función, porque dentro suyo vive la variable titles
+	});
+	console.log("SON " + data.features.length + " REGISTROS.");
+}
+request.send();	
+</script>
+</body>
+</html>
+
